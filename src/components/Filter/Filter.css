@@ -1,0 +1,19 @@
+.country-filters {
+    display: flex;
+}
+
+.country-search-filter, .population-filter-btn {
+    border: 3px solid #c5ced4;
+    border-radius: 4px;
+    padding: 4px 10px;
+}
+
+.population-filter-btn {
+    margin-left: 20px;
+}
+
+
+.clear-filter-btn {
+    margin-left: 10px;
+    align-self: center;
+}
