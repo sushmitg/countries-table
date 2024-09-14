@@ -1,9 +1,14 @@
-# React + Vite
+# React + Vite - Countries List Table
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- This is an app which fetches countries from https://api.sampleapis.com/countries/countries API and renders them in a Table.
 
-Currently, two official plugins are available:
+- The app contains a Search box to filter the countries list by Country Name and a Population Filter to filter the list by population < 1M, < 5M or < 10M.
+The Filters remain inactive until the user clicks on "Show All Countries" button.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-# countries-table
+- When user click "Show All Countries" button the list is fetched (only once) and rendered in the table below and the Button's text changes to "Hide Countries".
+
+- Whenever "Show All Countries"/"Hide Countries" button is clicked, the filters get reset.
+
+- The table rendered is paginated. Default page size is 10 which can be changed from the provided dropdown below the table. The pagination section has 4 buttons to go to 1st, Previous, Next and Last Page. The total count of the countries is display in the bottom left of the table.
+
+- The App uses TanStack Table v8 library to render the Table Component.
