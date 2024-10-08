@@ -12,3 +12,5 @@ The Filters remain inactive until the user clicks on "Show All Countries" button
 - The table rendered is paginated. Default page size is 10 which can be changed from the provided dropdown below the table. The pagination section has 4 buttons to go to 1st, Previous, Next and Last Page. The total count of the countries is display in the bottom left of the table.
 
 - The App uses TanStack Table v8 library to render the Table Component.
+
+- The app is live at https://sushmitg.github.io/countries-table/
