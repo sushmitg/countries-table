@@ -14,6 +14,7 @@ const App = () => {
   const [showTable, setShowTable] = useState(false);
   const [countries, setCountries] = useState([]);
   const [filteredCountries, setFilteredCountries] = useState([]);
+  const [isFetchError, setIsFetchError] = useState(false);
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -25,6 +26,7 @@ const App = () => {
       setCountries(response.data);
       setFilteredCountries(response.data);
     } catch (error) {
+      setIsFetchError(true);
       console.error("Error fetching data: ", error);
     } finally {
       setIsLoading(false);
@@ -71,8 +73,6 @@ const App = () => {
   );
 
   const toggleShowTable = useCallback(() => {
-    console.log("toggleShowTable");
-
     if (countries.length === 0) {
       fetchData();
     }
@@ -99,7 +99,9 @@ const App = () => {
         </div>
       </div>
       <div className="country-body">
-        {showTable && (
+        {isFetchError && <p>Something went wrong, please reload page...</p>}
+
+        {showTable && !isFetchError && (
           <Suspense fallback={<p>Loading...</p>}>
             <CountriesTable isLoading={isLoading} data={filteredCountries} />
           </Suspense>
