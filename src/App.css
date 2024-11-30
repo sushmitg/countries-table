@@ -3,7 +3,6 @@
   accent-color: var(--accent-color);
 }
 
-
 body {
   font-family: "Fira Sans", sans-serif;
   font-weight: 400;
@@ -12,8 +11,10 @@ body {
 }
 
 input:focus,
+input.hasValue,
 select:not(:disabled):focus,
-select:not(:disabled):active {
+select:not(:disabled):active,
+select:not(:disabled).hasValue {
   border-color: var(--accent-color);
   outline: none;
 }

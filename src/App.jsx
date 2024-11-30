@@ -1,4 +1,6 @@
 import React, { useState, Suspense, lazy, useCallback } from "react";
+import { useSelector } from "react-redux";
+import useCountriesActions from "./redux/hooks/useCountriesActions.js";
 import axios from "axios";
 import Filter from "./components/Filter/Filter.jsx";
 import ShowTableButton from "./components/ShowTableButton/ShowTableButton.jsx";
@@ -10,11 +12,13 @@ const CountriesTable = lazy(() =>
 import "./App.css";
 
 const App = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const [showTable, setShowTable] = useState(false);
-  const [countries, setCountries] = useState([]);
-  const [filteredCountries, setFilteredCountries] = useState([]);
-  const [isFetchError, setIsFetchError] = useState(false);
+
+  const { setCountries, setIsLoading, setIsFetchError } = useCountriesActions();
+
+  const { isLoading, isFetchError, countries, filteredCountries } = useSelector(
+    (state) => state.countriesReducer
+  );
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -23,8 +27,14 @@ const App = () => {
       const response = await axios.get(
         "https://api.sampleapis.com/countries/countries"
       );
+
+      if (response.data.error) {
+        setIsFetchError(true);
+        console.error("Error fetching data: ", error);
+        return;
+      }
+
       setCountries(response.data);
-      setFilteredCountries(response.data);
     } catch (error) {
       setIsFetchError(true);
       console.error("Error fetching data: ", error);
@@ -32,45 +42,6 @@ const App = () => {
       setIsLoading(false);
     }
   };
-
-  const applyFilters = useCallback(
-    (nameFilter, populationFilter) => {
-      let filtered = countries;
-
-      // Apply name filter
-      if (nameFilter) {
-        filtered = filtered.filter((country) =>
-          country.name.toLowerCase().includes(nameFilter.toLowerCase())
-        );
-      }
-
-      // Apply population filter
-      if (populationFilter) {
-        switch (populationFilter) {
-          case "1M":
-            filtered = filtered.filter(
-              (country) => country.population < 1000000
-            );
-            break;
-          case "5M":
-            filtered = filtered.filter(
-              (country) => country.population < 5000000
-            );
-            break;
-          case "10M":
-            filtered = filtered.filter(
-              (country) => country.population < 10000000
-            );
-            break;
-          default:
-            break;
-        }
-      }
-
-      setFilteredCountries(filtered);
-    },
-    [countries]
-  );
 
   const toggleShowTable = useCallback(() => {
     if (countries.length === 0) {
@@ -86,12 +57,7 @@ const App = () => {
         <h1 className="country-title">Countries Info</h1>
 
         <div className="country-filters-container">
-          <Filter
-            showTable={showTable}
-            countries={countries}
-            setFilteredCountries={setFilteredCountries}
-            applyFilters={applyFilters}
-          />
+          <Filter showTable={showTable} countriesExist={countries.length > 0} />
           <ShowTableButton
             showTable={showTable}
             toggleShowTable={toggleShowTable}
