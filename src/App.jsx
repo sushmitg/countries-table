@@ -1,5 +1,6 @@
 import React, { useState, Suspense, lazy, useCallback } from "react";
 import { useSelector } from "react-redux";
+import { COUNTRIES_API_URL } from "../config.js";
 import useCountriesActions from "./redux/hooks/useCountriesActions.js";
 import axios from "axios";
 import Filter from "./components/Filter/Filter.jsx";
@@ -24,9 +25,7 @@ const App = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.get(
-        "https://api.sampleapis.com/countries/countries"
-      );
+      const response = await axios.get(COUNTRIES_API_URL);
 
       if (response.data.error) {
         setIsFetchError(true);
