@@ -29,7 +29,7 @@ const App = () => {
 
       if (response.data.error) {
         setIsFetchError(true);
-        console.error("Error fetching data: ", error);
+        console.error("Error fetching data: ", response.data.error);
         return;
       }
 

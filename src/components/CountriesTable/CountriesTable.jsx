@@ -28,9 +28,9 @@ const CountriesTable = ({ isLoading, data }) => {
     [isLoading]
   );
 
-  const tableData = React.useMemo(
+  const tableData = useMemo(
     () => (isLoading ? Array(pagination.pageSize).fill({}) : data),
-    [isLoading, data]
+    [isLoading, data, pagination.pageSize]
   );
 
   const table = useReactTable({
