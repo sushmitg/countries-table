@@ -1,13 +1,18 @@
 .table-pagination-container {
-    display: flex;
-    justify-content: space-between;
-    text-align: right;
-    padding: 20px 0;
+  display: flex;
+  justify-content: space-between;
+  text-align: right;
+  padding: 20px 0;
 }
 
 .pagination-controls {
-    width: 300px;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
+  width: 310px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.pagination-status {
+  margin: 0 0.5rem;
 }
