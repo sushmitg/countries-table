@@ -21,7 +21,7 @@ const App = () => {
     (state) => state.countriesReducer
   );
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setIsLoading(true);
 
     try {
@@ -40,15 +40,15 @@ const App = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [setIsLoading, setIsFetchError, setCountries]);
 
   const toggleShowTable = useCallback(() => {
-    if (countries.length === 0) {
+    if (!showTable && countries.length === 0) {
       fetchData();
     }
 
     setShowTable(!showTable);
-  });
+  }, [showTable]);
 
   return (
     <div className="country-container">
@@ -64,12 +64,23 @@ const App = () => {
         </div>
       </div>
       <div className="country-body">
-        {isFetchError && <p>Something went wrong, please reload page...</p>}
-
-        {showTable && !isFetchError && (
-          <Suspense fallback={<p>Loading...</p>}>
-            <CountriesTable isLoading={isLoading} data={filteredCountries} />
-          </Suspense>
+        {showTable && (
+          <>
+            {isFetchError ? (
+              <p className="error-message">
+                Something went wrong, please reload page...
+              </p>
+            ) : (
+              <Suspense
+                fallback={<p className="loading-message">Loading...</p>}
+              >
+                <CountriesTable
+                  isLoading={isLoading}
+                  data={filteredCountries}
+                />
+              </Suspense>
+            )}
+          </>
         )}
       </div>
     </div>
