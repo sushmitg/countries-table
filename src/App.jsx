@@ -1,6 +1,7 @@
 import React, { useState, Suspense, lazy, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { COUNTRIES_API_URL } from "../config.js";
+import useOnlineStatus from "./hooks/useOnline.js";
 import useCountriesActions from "./redux/hooks/useCountriesActions.js";
 import axios from "axios";
 import Filter from "./components/Filter/Filter.jsx";
@@ -14,15 +15,21 @@ import "./App.css";
 
 const App = () => {
   const [showTable, setShowTable] = useState(false);
+  const isOnline = useOnlineStatus(); // Track network status
 
   const { setCountries, setIsLoading, setIsFetchError } = useCountriesActions();
-
   const { isLoading, isFetchError, countries, filteredCountries } = useSelector(
     (state) => state.countriesReducer
   );
 
   const fetchData = useCallback(async () => {
+    if (!isOnline) {
+      setIsFetchError(true); // Show error if offline
+      return;
+    }
+
     setIsLoading(true);
+    setIsFetchError(false);
 
     try {
       const response = await axios.get(COUNTRIES_API_URL);
@@ -47,8 +54,8 @@ const App = () => {
       fetchData();
     }
 
-    setShowTable(!showTable);
-  }, [showTable]);
+    setShowTable((prev) => !prev);
+  }, [showTable, countries.length, fetchData]);
 
   return (
     <div className="country-container">
@@ -64,24 +71,18 @@ const App = () => {
         </div>
       </div>
       <div className="country-body">
-        {showTable && (
-          <>
-            {isFetchError ? (
-              <p className="error-message">
-                Something went wrong, please reload page...
-              </p>
-            ) : (
-              <Suspense
-                fallback={<p className="loading-message">Loading...</p>}
-              >
-                <CountriesTable
-                  isLoading={isLoading}
-                  data={filteredCountries}
-                />
-              </Suspense>
-            )}
-          </>
-        )}
+        {showTable &&
+          (isFetchError ? (
+            <p className="error-message">
+              {isOnline
+                ? "Something went wrong. Please retry."
+                : "You're offline. Check your connection and try again."}
+            </p>
+          ) : (
+            <Suspense fallback={<p className="loading-message">Loading...</p>}>
+              <CountriesTable isLoading={isLoading} data={filteredCountries} />
+            </Suspense>
+          ))}
       </div>
     </div>
   );
