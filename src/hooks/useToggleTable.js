@@ -10,7 +10,7 @@ const useToggleTable = (countries) => {
     if (showTable && countries.length === 0) {
       fetchData();
     }
-  }, [showTable, countries.length, fetchData]);
+  }, [showTable, countries.length]);
 
   const toggleShowTable = useCallback(() => setShowTable((prev) => !prev));
 

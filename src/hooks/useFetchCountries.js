@@ -9,7 +9,7 @@ const useFetchCountries = () => {
     // Abort the previous request if any
     abortCountriesFetchRef.current?.abort();
     abortCountriesFetchRef.current = fetchCountries();
-  }, [fetchCountries]);
+  });
 
   return { fetchData };
 };
